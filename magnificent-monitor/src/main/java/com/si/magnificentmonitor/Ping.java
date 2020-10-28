@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 
 /**
- * A Ping represents a GET request-response pair to a webserver and holds information whether a request was successful
+ * A Ping represents the result of a GET request to a webserver and holds information whether a request was successful
  *  or failed. Pings are used to determine the health of a webserver.
  */
 @Getter
@@ -16,36 +16,37 @@ public class Ping {
 
     private final LocalDateTime responseTime;
 
-    private HttpStatus httpStatus;
+    private HttpStatus responseStatus;
     private String destination;
 
 
     Ping(String destination, ResponseEntity<String> response) {
 
+        // TODO is the response time enough or do we also need the starting time?
         // this is just an approximation to the actual response time.
         this.responseTime = LocalDateTime.now();
 
         this.setDestination(destination);
-        this.setHttpStatus(response.getStatusCode());
+        this.setResponseStatus(response.getStatusCode());
     }
 
 
     boolean isFailed(){
-        return ! httpStatus.equals(HttpStatus.OK);
+        return ! responseStatus.equals(HttpStatus.OK);
     }
 
-    private void setHttpStatus(HttpStatus httpStatus) {
-        if (httpStatus == null){
+    private void setResponseStatus(HttpStatus responseStatus) {
+        if (responseStatus == null){
             throw new RuntimeException("The status code of a Ping may not be null!");
         }
 
-        boolean statusCodeIsAsExpected = httpStatus.equals(HttpStatus.OK) || httpStatus.equals(HttpStatus.SERVICE_UNAVAILABLE) || httpStatus.equals(HttpStatus.INTERNAL_SERVER_ERROR);
+        boolean statusCodeIsAsExpected = responseStatus.equals(HttpStatus.OK) || responseStatus.equals(HttpStatus.SERVICE_UNAVAILABLE) || responseStatus.equals(HttpStatus.INTERNAL_SERVER_ERROR);
 
         if ( ! statusCodeIsAsExpected ){
-            throw new RuntimeException(String.format("The monitor can currently not handle the status code: %s ", httpStatus.toString()));
+            throw new RuntimeException(String.format("The monitor can currently not handle the status code: %s ", responseStatus.toString()));
         }
 
-        this.httpStatus = httpStatus;
+        this.responseStatus = responseStatus;
     }
 
 
