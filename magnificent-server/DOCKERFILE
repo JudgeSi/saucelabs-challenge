@@ -1,0 +1,4 @@
+FROM python:3.9-buster
+ADD server.py /
+RUN pip install twisted
+CMD [ "python", "./server.py" ]
