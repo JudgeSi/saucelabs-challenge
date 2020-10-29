@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
- * Monitors the health of a webserver (the subject of the monitor) and regularly logs the current health of it.
+ * Monitors the health of a webserver (the subject of the monitor) by pinging it and regularly logging the current
+ *  health of it.
  */
 @Component
 @RequiredArgsConstructor
@@ -43,25 +43,12 @@ class ServerMonitor {
     @Scheduled(fixedRateString = "#{config.reportIntervalInMilliSeconds()}")
     void reportHealthOfServer() {
 
-        var beginningOfCurrentInterval = LocalDateTime.now().minus(Duration.ofMillis(config.pingIntervalInMilliSeconds()));
+        var beginningOfCurrentInterval = LocalDateTime.now().minus(Duration.ofMillis(config.reportIntervalInMilliSeconds()));
 
         var pingsInCurrentInterval = pings.allPingsAfter(beginningOfCurrentInterval);
 
-        var failedPings = countFailedPingsIn(pingsInCurrentInterval);
+        var currentHealth = new Health(config.getSubjectURL().toString(), pingsInCurrentInterval);
 
-        var failedPingsInPercent = (failedPings / pingsInCurrentInterval.size() ) * 100;
-
-        if (failedPingsInPercent > config.getHealthThreshold()){
-            log.info("Server at: {} is unhealthy! {}% of the last {} requests failed!", config.getSubjectURL(), failedPingsInPercent, pingsInCurrentInterval.size());
-        }
-        else{
-            log.info("Server at: {} is healthy!", config.getSubjectURL());
-        }
-    }
-
-    private long countFailedPingsIn(List<Ping> pings) {
-        return pings.stream()
-                .filter(Ping::isFailed)
-                .count();
+        log.info(currentHealth.toString());
     }
 }

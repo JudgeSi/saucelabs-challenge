@@ -31,8 +31,8 @@ public class Ping {
     }
 
 
-    boolean isFailed(){
-        return ! responseStatus.equals(HttpStatus.OK);
+    boolean wasSuccessful(){
+        return responseStatus.equals(HttpStatus.OK);
     }
 
     private void setResponseStatus(HttpStatus responseStatus) {
