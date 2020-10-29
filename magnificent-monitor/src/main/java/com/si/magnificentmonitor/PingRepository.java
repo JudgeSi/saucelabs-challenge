@@ -8,4 +8,6 @@ interface PingRepository {
     Ping save(Ping ping);
 
     List<Ping> allPingsAfter(LocalDateTime timeAtBeginningOfLatestInterval);
+
+    void deleteAll();
 }

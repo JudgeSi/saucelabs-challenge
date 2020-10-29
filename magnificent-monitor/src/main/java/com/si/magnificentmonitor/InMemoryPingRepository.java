@@ -33,4 +33,10 @@ class InMemoryPingRepository implements PingRepository {
     private static final Predicate<? super Ping> pingIsAfter(LocalDateTime timeAtBeginningOfLatestInterval) {
         return ping -> ping.getResponseTime().isAfter(timeAtBeginningOfLatestInterval);
     }
+
+
+    @Override
+    public void deleteAll() {
+        pings.clear();
+    }
 }
