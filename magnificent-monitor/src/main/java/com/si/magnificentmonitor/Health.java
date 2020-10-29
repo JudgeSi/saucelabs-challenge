@@ -1,5 +1,6 @@
 package com.si.magnificentmonitor;
 
+import lombok.Getter;
 import lombok.ToString;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
  * This class represents the health of a server based on a number of pings.
  */
 @ToString
+@Getter
 public class Health {
     
     private final String endpoint;
