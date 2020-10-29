@@ -10,10 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.DefaultResponseErrorHandler;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 
 /**
@@ -30,11 +32,14 @@ class PingUtility {
 
         log.debug("executing ping to {}", destination.toString());
 
-        var response = template.exchange(destination, HttpMethod.GET, null, String.class);
-
-        log.debug("executed ping. received status {} and body {}", response.getStatusCode(), response.getBody());
-
-        return Ping.constructFor(destination, response);
+        try{
+            var response = template.exchange(destination, HttpMethod.GET, null, String.class);
+            log.debug("executed ping. received status {} and body {}", response.getStatusCode(), response.getBody());
+            return Ping.constructFor(destination, response);
+        }catch(ResourceAccessException e){
+            log.debug("executed ping. Did not receive a response because {}", e.getMessage());
+            return new Ping(destination.toString(), HttpStatus.SERVICE_UNAVAILABLE);
+        }
     }
 
 
