@@ -3,6 +3,7 @@ package com.si.magnificentmonitor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -12,7 +13,7 @@ class InMemoryPingRepository implements PingRepository {
 
     // very suboptimal for looking up Pings by date.
     // will run out of memory at some point
-    public List<Ping> pings;
+    private final List<Ping> pings = new ArrayList<>();
 
     @Override
     public Ping save(Ping ping) {
