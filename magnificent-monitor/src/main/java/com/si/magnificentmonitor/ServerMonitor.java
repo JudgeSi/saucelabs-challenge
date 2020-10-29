@@ -21,6 +21,7 @@ class ServerMonitor {
     private final Config config;
     private final PingUtility pingUtility;
     private final PingRepository pings;
+    private final HealthLog healthLog;
 
     /**
      * Attempts to {@link Ping} the subject (webserver) of this monitor at the configured endpoint.
@@ -35,7 +36,7 @@ class ServerMonitor {
         var ping = pingUtility.ping(config.getSubjectURL());
 
         if ( ping.getResponseStatus().equals(HttpStatus.SERVICE_UNAVAILABLE) ){
-            log.warn("server at: {} is unavailable!", config.getSubjectURL());
+            healthLog.reportUnavailable(ping);
         }
 
         pings.save(ping);
@@ -57,8 +58,8 @@ class ServerMonitor {
 
         log.debug("health calculated, current health is {}", currentHealth);
 
-        log.info(currentHealth.toString());
+        healthLog.report(currentHealth);
 
-        log.debug("reported helath of server.");
+        log.debug("reported health of server.");
     }
 }

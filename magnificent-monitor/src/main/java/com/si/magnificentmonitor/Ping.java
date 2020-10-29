@@ -21,19 +21,17 @@ public class Ping {
     private String destination;
 
 
-    Ping(String destination, HttpStatus responseStatus) {
+    static Ping constructFor(URI destination, ResponseEntity<String> response) {
+        return new Ping(destination.toString(), response.getStatusCode());
+    }
 
-        // TODO is the response time enough or do we also need the starting time?
+
+    Ping(String destination, HttpStatus responseStatus) {
         // this is just an approximation to the actual response time.
         this.responseTime = LocalDateTime.now();
 
         this.setDestination(destination);
         this.setResponseStatus(responseStatus);
-    }
-
-
-    static Ping constructFor(URI destination, ResponseEntity<String> response) {
-        return new Ping(destination.toString(), response.getStatusCode());
     }
 
 
