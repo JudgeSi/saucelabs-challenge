@@ -6,7 +6,7 @@
 1. The configuration specs
 1. Integration of the log
 1. Design Goals & Decisions
-1. Functionality (!!TODO better wording!!)
+1. Functionality
 1. Known issues
 1. Architecture
 
@@ -72,6 +72,7 @@ Therefore the following **design decisions** were taken:
 * Since the requirements on the timeframes for the health reports are very vague, they are configurable.
 * The message which this monitor logs should be machine readable, for later analyses. They are therefore written in json
     format.
+* implementation is done as a spring boot app, for testing, reliability & scheduling. The embedded webserver is not started though.
 
 ## 4. Functionality
 Based on the challenge and the design goals the following functionality was decided upon.

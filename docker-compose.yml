@@ -1,6 +1,16 @@
 version: "3.7"
 services:
-  partner-system:
+  magnificent-monitor:
+    build:
+      context: magnificent-monitor/
+      dockerfile: DOCKERFILE
+    environment:
+      - SUBJECT_URL=http://magnificent-server:12345/
+      - PING_INTERVAL=1
+      - REPORT_INTERVAL=10
+      - LOG_SEVERITY=INFO
+
+  magnificent-server:
     build:
       context: magnificent-server
       dockerfile: DOCKERFILE
