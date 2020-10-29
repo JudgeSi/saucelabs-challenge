@@ -10,24 +10,25 @@ import java.util.List;
 @ToString
 public class Health {
     
-    private final String pingedEndpoint;
+    private final String endpoint;
     
     private final long successfulPings;
     
     private final long failedPings;
-    
-    private final double failedPingsInPercent;
-    
-    
-    public Health(String pingedEndpoint, List<Ping> pings) {
 
-        this.pingedEndpoint = pingedEndpoint;
+    // the ratio of failed requests in all of the pings.
+    private final double healthiness;
+    
+    
+    public Health(String endpoint, List<Ping> pings) {
+
+        this.endpoint = endpoint;
 
         this.successfulPings = countSuccessfulPingsIn(pings);
 
         this.failedPings = pings.size() - this.successfulPings;
 
-        this.failedPingsInPercent = calculateRatioBetween(this.failedPings, pings.size());
+        this.healthiness = calculateRatioBetween(this.successfulPings, pings.size());
     }
     
     
