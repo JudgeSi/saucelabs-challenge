@@ -32,7 +32,7 @@ class ServerMonitor {
 
         log.debug("starting ping...");
 
-        var ping = pingUtility.ping(config.getSubjectURL());
+        var ping = pingUtility.ping(this.config.getSubjectURL());
 
         if ( ping.indicatesUnresponsiveServer() ){
             healthLog.reportUnavailable(ping);
@@ -49,13 +49,13 @@ class ServerMonitor {
     @Scheduled(fixedRateString = "#{config.reportIntervalInMilliSeconds()}")
     void reportHealthOfServer() {
 
-        var beginningOfCurrentInterval = LocalDateTime.now().minus(Duration.ofMillis(config.reportIntervalInMilliSeconds()));
+        var beginningOfCurrentInterval = LocalDateTime.now().minus(Duration.ofMillis(this.config.reportIntervalInMilliSeconds()));
 
         log.debug("reporting health of server for interval starting at {}", beginningOfCurrentInterval);
 
         var pingsInCurrentInterval = pings.allPingsAfter(beginningOfCurrentInterval);
 
-        var currentHealth = new Health(config.getSubjectURL().toString(), pingsInCurrentInterval);
+        var currentHealth = new Health(this.config.getSubjectURL().toString(), pingsInCurrentInterval);
 
         log.debug("health calculated, current health is {}", currentHealth);
 

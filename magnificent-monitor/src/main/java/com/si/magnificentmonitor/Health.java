@@ -11,7 +11,9 @@ import java.util.List;
 @ToString
 @Getter
 public class Health {
-    
+
+    private final String type = "health-msg";
+
     private final String endpoint;
     
     private final long successfulPings;

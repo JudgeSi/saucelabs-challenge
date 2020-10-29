@@ -47,7 +47,6 @@ public class ServerMonitorIntegrationTests {
     @Autowired
     private PingRepository pings;
 
-    // This is ugly, but in my opinion the cleanest way to verify output which should be written to the log.
     @MockBean
     private HealthLog healthLog;
     @Captor

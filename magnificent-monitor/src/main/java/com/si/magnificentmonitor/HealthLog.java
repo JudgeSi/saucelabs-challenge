@@ -1,8 +1,17 @@
 package com.si.magnificentmonitor;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Utility which reports the current health of a server based and allows for modification and testability of logging.
@@ -10,6 +19,23 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 class HealthLog {
+
+    private final ObjectMapper json = new ObjectMapper();
+
+
+    void report(Health health){
+
+        if(health == null){
+            throw new RuntimeException("health to report may not be null.");
+        }
+
+        try{
+            log.info(json.writeValueAsString(health));
+        }catch (JsonProcessingException e){
+            log.error("Could not parse {} to json.", health.toString());
+        }
+    }
+
 
     void reportUnavailable(Ping ping){
 
@@ -21,16 +47,22 @@ class HealthLog {
             throw new RuntimeException("a server may only be reported as unavailable if the ping indicates the same.");
         }
 
-        log.warn("server at: {} is unavailable!", ping.getDestination());
+        var unresponsiveError = constructUnresponsiveError(ping);
+
+        try{
+            log.warn(json.writeValueAsString(unresponsiveError));
+        }catch (JsonProcessingException e){
+            log.error("Could not parse {} to json.", unresponsiveError.toString());
+        }
     }
 
+    private Map<String, Object> constructUnresponsiveError(Ping ping) {
+        var message = new HashMap<String, Object>();
 
-    void report(Health health){
+        message.put("type", "unresponsive-msg");
+        message.put("endpoint", ping.getDestination());
+        message.put("time", ping.getResponseTime().format(DateTimeFormatter.ISO_DATE_TIME));
 
-        if(health == null){
-            throw new RuntimeException("health to report may not be null.");
-        }
-
-        log.info(health.toString());
+        return message;
     }
 }

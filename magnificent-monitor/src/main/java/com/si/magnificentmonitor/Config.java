@@ -22,10 +22,6 @@ public class Config {
     @Value("${REPORT_INTERVAL:60}")
     private int reportInterval;
 
-    @Getter
-    @Value("${HEALTH_TRESHOLD:25}")
-    private int healthThreshold;
-
     public void setSubjectURL(String subjectURL) {
         // TODO throw pretty exception.
         this.subjectURL = URI.create(subjectURL);
