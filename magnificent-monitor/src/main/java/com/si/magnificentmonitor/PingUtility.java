@@ -39,7 +39,7 @@ class PingUtility {
 
 
     @Configuration
-    public class PingConfig{
+    public static class PingConfig{
 
         /**
          * @return a resttemplate configured to gracefully handle 500 and 503 response codes, since they are expected.
