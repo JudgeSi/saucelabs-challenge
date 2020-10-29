@@ -15,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.URI;
-import java.time.LocalDateTime;
 
 /**
  * Utility which executes pings (HTTP GET) to a desired URL, handles errors and constructs a {@link Ping}.
@@ -35,7 +34,7 @@ class PingUtility {
 
         log.debug("executed ping. received status {} and body {}", response.getStatusCode(), response.getBody());
 
-        return new Ping(destination.toString(), response);
+        return Ping.constructFor(destination, response);
     }
 
 

@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 
 
@@ -20,20 +21,26 @@ public class Ping {
     private String destination;
 
 
-    Ping(String destination, ResponseEntity<String> response) {
+    Ping(String destination, HttpStatus responseStatus) {
 
         // TODO is the response time enough or do we also need the starting time?
         // this is just an approximation to the actual response time.
         this.responseTime = LocalDateTime.now();
 
         this.setDestination(destination);
-        this.setResponseStatus(response.getStatusCode());
+        this.setResponseStatus(responseStatus);
+    }
+
+
+    static Ping constructFor(URI destination, ResponseEntity<String> response) {
+        return new Ping(destination.toString(), response.getStatusCode());
     }
 
 
     boolean wasSuccessful(){
         return responseStatus.equals(HttpStatus.OK);
     }
+
 
     private void setResponseStatus(HttpStatus responseStatus) {
         if (responseStatus == null){
