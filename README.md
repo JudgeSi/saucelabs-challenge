@@ -1,7 +1,7 @@
 # The (not-so) Magnificent Monitor
 > This is my solution to the coding challenge of sauce-labs.
 
-To view the **documentation** (configuration specs, design decisions, architecture) of the magnificent-monotor please refer to the 
+To view the **documentation** (configuration specs, design decisions, architecture, etc) of my solution, please refer to the 
 [README of the magnificent-monitor](magnificent-monitor/README.md)
 
 
@@ -28,7 +28,6 @@ mvn clean package -f magnificent-monitor/pom.xml
 # build the docker images
 docker-compose build
 ```
-*If you run into trouble getting the magnificent-server running, please consider specifying a different python image.*
 ```
 # get everything up an running
 docker-compose up

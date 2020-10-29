@@ -65,14 +65,14 @@ The **design goals** of this app where the following:
 
 Therefore the following **design decisions** were taken:
 * no reliance on a database, everything is persisted in-memory using Java utilities.
-* reliance on a rich domain model and services. This showcases my coding style and would theoretically allow to easily 
+* reliance on a 'rich' domain model. This is in line with my coding style and would theoretically allow to easily 
     extend the monitors functionality. 
 * The monitor is not implemented to just monitor the health of the `magnificent-server`, but rather can be configured to 
     monitor any other server also.
 * Since the requirements on the timeframes for the health reports are very vague, they are configurable.
-* The message which this monitor logs should be machine readable, for later analyses. They are therefore written in json
+* The message which this monitor logs should be machine readable, for later analysis. They are therefore written in json
     format.
-* implementation is done as a spring boot app, for testing, reliability & scheduling. The embedded webserver is not started though.
+* implementation is done as a spring boot app, to allow for easy testing, reliability & scheduling capabilities. The embedded webserver is not started though.
 
 ## 4. Functionality
 Based on the challenge and the design goals the following functionality was decided upon.
@@ -98,3 +98,5 @@ Based on the challenge and the design goals the following functionality was deci
     configuration.
 
 ## 6. Architecture
+
+![The architecture](architecture.jpeg)
