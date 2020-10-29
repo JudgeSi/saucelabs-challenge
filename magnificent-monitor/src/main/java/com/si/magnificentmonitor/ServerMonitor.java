@@ -2,7 +2,6 @@ package com.si.magnificentmonitor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -29,19 +28,21 @@ class ServerMonitor {
      * @return
      */
     @Scheduled(fixedRateString = "#{config.pingIntervalInMilliSeconds()}")
-    void pingServer() {
+    Ping pingServer() {
 
         log.debug("starting ping...");
 
         var ping = pingUtility.ping(config.getSubjectURL());
 
-        if ( ping.getResponseStatus().equals(HttpStatus.SERVICE_UNAVAILABLE) ){
+        if ( ping.indicatesUnresponsiveServer() ){
             healthLog.reportUnavailable(ping);
         }
 
         pings.save(ping);
 
         log.debug("finished ping.");
+
+        return ping;
     }
 
 

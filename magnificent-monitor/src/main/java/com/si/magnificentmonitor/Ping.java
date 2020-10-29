@@ -18,6 +18,7 @@ public class Ping {
     private final LocalDateTime responseTime;
 
     private HttpStatus responseStatus;
+
     private String destination;
 
 
@@ -37,6 +38,11 @@ public class Ping {
 
     boolean wasSuccessful(){
         return responseStatus.equals(HttpStatus.OK);
+    }
+
+
+    boolean indicatesUnresponsiveServer() {
+        return this.getResponseStatus().equals(HttpStatus.SERVICE_UNAVAILABLE);
     }
 
 
