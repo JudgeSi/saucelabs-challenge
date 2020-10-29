@@ -30,13 +30,17 @@ class ServerMonitor {
     @Scheduled(fixedRateString = "#{config.pingIntervalInMilliSeconds()}")
     void pingServer() {
 
+        log.debug("starting ping...");
+
         var ping = pingUtility.ping(config.getSubjectURL());
 
         if ( ping.getResponseStatus().equals(HttpStatus.SERVICE_UNAVAILABLE) ){
-            log.warn("Server at: {} is unavailable!", config.getSubjectURL());
+            log.warn("server at: {} is unavailable!", config.getSubjectURL());
         }
 
         pings.save(ping);
+
+        log.debug("finished ping.");
     }
 
 
@@ -45,10 +49,16 @@ class ServerMonitor {
 
         var beginningOfCurrentInterval = LocalDateTime.now().minus(Duration.ofMillis(config.reportIntervalInMilliSeconds()));
 
+        log.debug("reporting health of server for interval starting at {}", beginningOfCurrentInterval);
+
         var pingsInCurrentInterval = pings.allPingsAfter(beginningOfCurrentInterval);
 
         var currentHealth = new Health(config.getSubjectURL().toString(), pingsInCurrentInterval);
 
+        log.debug("health calculated, current health is {}", currentHealth);
+
         log.info(currentHealth.toString());
+
+        log.debug("reported helath of server.");
     }
 }

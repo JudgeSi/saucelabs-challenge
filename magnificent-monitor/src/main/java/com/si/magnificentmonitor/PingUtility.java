@@ -1,6 +1,7 @@
 package com.si.magnificentmonitor;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,13 +22,18 @@ import java.time.LocalDateTime;
  */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 class PingUtility {
 
     private final RestTemplate template;
 
     Ping ping(URI destination){
 
+        log.debug("executing ping to {}", destination.toString());
+
         var response = template.exchange(destination, HttpMethod.GET, null, String.class);
+
+        log.debug("executed ping. received status {} and body {}", response.getStatusCode(), response.getBody());
 
         return new Ping(destination.toString(), response);
     }
